@@ -3,9 +3,18 @@ import dotenv from 'dotenv'
 import connectDb from './config/db.js';
 
 dotenv.config()
+
 const app = express();
 
-// connectDb()
+connectDb()
+
+app.use(express.json())
+
+// import routes
+import authRoutes from './routes/auth.route.js';
+
+// writing routes
+app.use("/api/v1/auth",authRoutes)
 
 app.get("/", (req, res) => {
     res.send("DevTask API is running 🚀");
