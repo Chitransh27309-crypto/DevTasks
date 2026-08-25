@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import connectDb from './config/db.js';
+import authRoutes from './routes/auth.route.js';
 
 dotenv.config()
 
@@ -10,10 +11,7 @@ connectDb()
 
 app.use(express.json())
 
-// import routes
-import authRoutes from './routes/auth.route.js';
-
-// writing routes
+// routes
 app.use("/api/v1/auth",authRoutes)
 
 app.get("/", (req, res) => {
