@@ -1,8 +1,9 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import connectDb from './config/db.js';
-import authRoutes from './routes/auth.route.js';
 import cookieParser from "cookie-parser";
+import authRoutes from './routes/auth.route.js';
+import projectRoutes from "./routes/project.route.js";
 
 dotenv.config()
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 
 // routes
 app.use("/api/v1/auth",authRoutes)
+app.use("/api/v1/projects", projectRoutes);
 
 app.get("/", (req, res) => {
     res.send("DevTask API is running 🚀");
