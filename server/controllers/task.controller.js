@@ -62,6 +62,8 @@ const getTasks = async (req, res) => {
     try {
         const { projectId } = req.params;
 
+        const { status, priority, search, sort = "createdAt", order = "desc" } = req.query;
+
         // Check that the project belongs to the logged-in user
         const project = await Project.findOne({
             _id: projectId,
@@ -74,14 +76,58 @@ const getTasks = async (req, res) => {
             });
         }
 
-        // Get tasks belonging to this project and user
-        const tasks = await Task.find({
+        // Base filter
+        const filter = {
             project: projectId,
             owner: req.user
-        }).sort({ createdAt: -1 });
+        };
+
+        // Filter by status
+        if (status) {
+            filter.status = status;
+        }
+
+        // Filter by priority
+        if (priority) {
+            filter.priority = priority;
+        }
+
+        // Search by title or description
+        if (search) {
+            filter.$or = [
+                {
+                    title: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                },
+                {
+                    description: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                }
+            ];
+        }
+
+        const allowedSortFields = [
+            "createdAt",
+            "dueDate",
+            "priority",
+            "title"
+        ];
+
+        const sortField = allowedSortFields.includes(sort) ? sort : "createdAt";
+
+        const sortOrder = order === "asc" ? 1 : -1;
+
+        const tasks = await Task.find(filter).sort({
+            [sortField]: sortOrder
+        });
 
         res.status(200).json({
             message: "Tasks fetched successfully",
+            count: tasks.length,
             tasks
         });
 
