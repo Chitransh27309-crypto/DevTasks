@@ -6,12 +6,20 @@ import authRoutes from './routes/auth.route.js';
 import projectRoutes from "./routes/project.route.js";
 import taskRoutes from "./routes/task.route.js";
 import dashboardRoutes from "./routes/dashboard.route.js"; 
+import cors from "cors";
 
 dotenv.config()
 
 const app = express();
 
 connectDb()
+
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true
+    })
+);
 
 app.use(express.json())
 app.use(cookieParser());

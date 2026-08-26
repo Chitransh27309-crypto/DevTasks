@@ -231,7 +231,12 @@ const refreshAccessToken = async (req, res) => {
 
         // 11. Send new access token
         res.status(200).json({
-            accessToken
+            accessToken,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
         });
 
     } catch (error) {
