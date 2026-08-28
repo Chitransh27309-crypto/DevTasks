@@ -1,8 +1,36 @@
 import { apiRequest } from "./api.js";
 
-export const getTasks = async (projectId, accessToken) => {
+export const getTasks = async (
+    projectId,
+    accessToken,
+    filters = {}
+) => {
+    const queryParams = new URLSearchParams();
+
+    if (filters.search) {
+        queryParams.append("search", filters.search);
+    }
+
+    if (filters.status) {
+        queryParams.append("status", filters.status);
+    }
+
+    if (filters.priority) {
+        queryParams.append("priority", filters.priority);
+    }
+
+    if (filters.sort) {
+        queryParams.append("sort", filters.sort);
+    }
+
+    if (filters.order) {
+        queryParams.append("order", filters.order);
+    }
+
+    const queryString = queryParams.toString();
+
     return await apiRequest(
-        `/projects/${projectId}/tasks`,
+        `/projects/${projectId}/tasks${queryString ? `?${queryString}` : ""}`,
         {
             method: "GET"
         },

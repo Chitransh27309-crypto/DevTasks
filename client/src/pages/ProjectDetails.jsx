@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/auth.context.jsx";
 import { getProjectById } from "../services/project.service.js";
-import { getTasks,deleteTask } from "../services/task.service.js";
+import { getTasks, deleteTask } from "../services/task.service.js";
 import TaskModal from "../components/TaskModal.jsx";
 
 function ProjectDetails() {
@@ -20,6 +20,11 @@ function ProjectDetails() {
     const [showTaskModal, setShowTaskModal] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
     const [deletingTask, setDeletingTask] = useState(null);
+    const [search, setSearch] = useState("");
+    const [status, setStatus] = useState("");
+    const [priority, setPriority] = useState("");
+    const [sort, setSort] = useState("createdAt");
+    const [order, setOrder] = useState("desc");
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -46,7 +51,17 @@ function ProjectDetails() {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const data = await getTasks(id, accessToken);
+                const data = await getTasks(
+                    id,
+                    accessToken,
+                    {
+                        search,
+                        status,
+                        priority,
+                        sort,
+                        order
+                    }
+                );
 
                 setTasks(data.tasks);
             } catch (error) {
@@ -64,7 +79,7 @@ function ProjectDetails() {
         if (accessToken && id) {
             fetchTasks();
         }
-    }, [id, accessToken]);
+    }, [id, accessToken, search, status, priority, sort, order]);
 
     const handleDeleteTask = async () => {
         try {
@@ -192,7 +207,96 @@ function ProjectDetails() {
                         </p>
                     </div>
                 </div>
+                <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
 
+                    <input
+                        type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search tasks..."
+                        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
+                    />
+
+                    <select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
+                    >
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option value="todo">
+                            Todo
+                        </option>
+
+                        <option value="in-progress">
+                            In Progress
+                        </option>
+
+                        <option value="completed">
+                            Completed
+                        </option>
+                    </select>
+
+                    <select
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value)}
+                        className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
+                    >
+                        <option value="">
+                            All Priorities
+                        </option>
+
+                        <option value="low">
+                            Low
+                        </option>
+
+                        <option value="medium">
+                            Medium
+                        </option>
+
+                        <option value="high">
+                            High
+                        </option>
+                    </select>
+
+                    <select
+                        value={`${sort}-${order}`}
+                        onChange={(e) => {
+                            const [newSort, newOrder] = e.target.value.split("-");
+
+                            setSort(newSort);
+                            setOrder(newOrder);
+                        }}
+                        className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
+                    >
+                        <option value="createdAt-desc">
+                            Newest First
+                        </option>
+
+                        <option value="createdAt-asc">
+                            Oldest First
+                        </option>
+
+                        <option value="dueDate-asc">
+                            Earliest Due Date
+                        </option>
+
+                        <option value="dueDate-desc">
+                            Latest Due Date
+                        </option>
+
+                        <option value="title-asc">
+                            Title A-Z
+                        </option>
+
+                        <option value="title-desc">
+                            Title Z-A
+                        </option>
+                    </select>
+
+                </div>
                 {/* Tasks */}
                 <div className="rounded-xl bg-white p-6 shadow-sm">
                     {tasksLoading ? (
