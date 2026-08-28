@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { refreshAccessToken } from "../services/auth.service.js";
 const AuthContext = createContext();
 
@@ -7,18 +7,29 @@ export const AuthProvider = ({ children }) => {
     const [accessToken, setAccessToken] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const restoreAttempted = useRef(false);
+
     useEffect(() => {
+        if (restoreAttempted.current) {
+            return;
+        }
+
+        restoreAttempted.current = true;
+
         const restoreSession = async () => {
             try {
+                console.log("Restoring session...");
                 const data = await refreshAccessToken();
+                console.log("Session restored ");
                 setAccessToken(data.accessToken);
                 setUser(data.user);
             } catch (error) {
-                console.log("No active session");
+                console.log("No active session:", error.message);
             } finally {
                 setLoading(false);
             }
         };
+
         restoreSession();
     }, []);
 

@@ -1,4 +1,5 @@
 import Project from "../models/Project.models.js";
+import Task from "../models/Task.models.js";
 
 const createProject = async (req, res) => {
     try {
@@ -146,7 +147,7 @@ const deleteProject = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const project = await Project.findOneAndDelete({
+        const project = await Project.findOne({
             _id: id,
             owner: req.user
         });
@@ -157,8 +158,17 @@ const deleteProject = async (req, res) => {
             });
         }
 
+        await Task.deleteMany({
+            project: id,
+            owner: req.user
+        });
+
+        await Project.deleteOne({
+            _id: id
+        });
+
         res.status(200).json({
-            message: "Project deleted successfully"
+            message: "Project and its tasks deleted successfully"
         });
 
     } catch (error) {

@@ -4,6 +4,7 @@ import Register from "./pages/Register.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import DashboardLayout from "./layouts/DashboardLayout.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Projects from "./pages/Projects.jsx";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         {/* Protected routes */}
         <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/projects" element={<h1 className="text-2xl font-bold">Projects</h1>} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/projects/:id" element={<h1 className="text-2xl font-bold">Project Details</h1>} />
         </Route>
       </Routes>
