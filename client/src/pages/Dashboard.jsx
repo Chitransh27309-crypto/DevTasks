@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getDashboardStats } from "../services/dashboard.service";
 import { useAuth } from "../context/auth.context.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
     const { accessToken } = useAuth();
@@ -8,6 +9,8 @@ function Dashboard() {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -126,7 +129,10 @@ function Dashboard() {
                         Manage your software projects and their tasks.
                     </p>
 
-                    <button className="cursor-pointer mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                    <button
+                        onClick={() => navigate("/projects")}
+                        className="mt-4 cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                    >
                         View Projects
                     </button>
                 </div>
@@ -140,7 +146,10 @@ function Dashboard() {
                         Stay on top of your pending and active tasks.
                     </p>
 
-                    <button className="cursor-pointer mt-4 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    <button
+                        onClick={() => navigate("/projects")}
+                        className="mt-4 cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    >
                         View Tasks
                     </button>
                 </div>

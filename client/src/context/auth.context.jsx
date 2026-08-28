@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, useRef } from "react";
-import { refreshAccessToken } from "../services/auth.service.js";
+import { refreshAccessToken, logoutUser as logoutUserApi } from "../services/auth.service.js";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -33,6 +33,17 @@ export const AuthProvider = ({ children }) => {
         restoreSession();
     }, []);
 
+    const logoutUser = async () => {
+        try {
+            await logoutUserApi();
+        } catch (error) {
+            console.error("Logout error:", error.message);
+        } finally {
+            setUser(null);
+            setAccessToken(null);
+        }
+    };
+
     return (
         <AuthContext.Provider
             value={{
@@ -40,7 +51,8 @@ export const AuthProvider = ({ children }) => {
                 setUser,
                 accessToken,
                 setAccessToken,
-                loading
+                loading,
+                logoutUser
             }}
         >
             {children}

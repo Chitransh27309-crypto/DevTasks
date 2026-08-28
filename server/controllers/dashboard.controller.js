@@ -1,9 +1,10 @@
 import Project from "../models/Project.models.js";
 import Task from "../models/Task.models.js";
+import mongoose from "mongoose";
 
 const getDashboardStats = async (req, res) => {
     try {
-        const userId = req.user;
+        const userId = new mongoose.Types.ObjectId(req.user);
 
         // Count user's projects
         const totalProjects = await Project.countDocuments({
