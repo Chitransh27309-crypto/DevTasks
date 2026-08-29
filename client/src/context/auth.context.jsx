@@ -33,6 +33,42 @@ export const AuthProvider = ({ children }) => {
         restoreSession();
     }, []);
 
+    useEffect(() => {
+        if (!accessToken) {
+            return;
+        }
+
+        const refreshInterval = Number(
+            import.meta.env.VITE_ACCESS_TOKEN_REFRESH_INTERVAL
+        );
+
+        const timer = setTimeout(async () => {
+            try {
+                console.log("Refreshing access token...");
+
+                const data = await refreshAccessToken();
+
+                setAccessToken(data.accessToken);
+                setUser(data.user);
+
+                console.log("Access token refreshed");
+
+            } catch (error) {
+                console.error(
+                    "Failed to refresh access token:",
+                    error.message
+                );
+
+                setUser(null);
+                setAccessToken(null);
+            }
+        }, refreshInterval);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [accessToken]);
+
     const logoutUser = async () => {
         try {
             await logoutUserApi();

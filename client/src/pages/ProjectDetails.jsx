@@ -4,6 +4,7 @@ import { useAuth } from "../context/auth.context.jsx";
 import { getProjectById } from "../services/project.service.js";
 import { getTasks, deleteTask } from "../services/task.service.js";
 import TaskModal from "../components/TaskModal.jsx";
+import Loading from "../components/Loading.jsx";
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -108,11 +109,7 @@ function ProjectDetails() {
     };
 
     if (loading) {
-        return (
-            <div className="text-gray-600">
-                Loading project...
-            </div>
-        );
+        return <Loading />
     }
 
     if (error) {
@@ -300,17 +297,19 @@ function ProjectDetails() {
                 {/* Tasks */}
                 <div className="rounded-xl bg-white p-6 shadow-sm">
                     {tasksLoading ? (
-                        <p className="text-gray-500">
-                            Loading tasks...
-                        </p>
+                        <Loading />
                     ) : tasksError ? (
                         <p className="text-red-600">
                             {tasksError}
                         </p>
                     ) : tasks.length === 0 ? (
                         <div className="py-8 text-center">
-                            <p className="text-gray-500">
-                                No tasks yet.
+                            <h3 className="text-lg font-semibold text-gray-900">
+                                No tasks yet
+                            </h3>
+
+                            <p className="mt-2 text-sm text-gray-500">
+                                Create your first task for this project.
                             </p>
 
                             <button
@@ -318,7 +317,7 @@ function ProjectDetails() {
                                     setSelectedTask(null);
                                     setShowTaskModal(true);
                                 }}
-                                className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                                className="mt-4 cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
                             >
                                 + Add Task
                             </button>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getDashboardStats } from "../services/dashboard.service";
 import { useAuth } from "../context/auth.context.jsx";
 import { useNavigate } from "react-router-dom";
+import Loading from "../components/Loading.jsx";
 
 function Dashboard() {
     const { accessToken } = useAuth();
@@ -33,17 +34,25 @@ function Dashboard() {
     }, [accessToken]);
 
     if (loading) {
-        return (
-            <div className="text-gray-600">
-                Loading dashboard...
-            </div>
-        );
+        return <Loading />
     }
-
     if (error) {
         return (
-            <div className="text-red-600">
-                {error}
+            <div className="rounded-xl bg-white p-10 text-center shadow-sm">
+                <h2 className="text-lg font-semibold text-gray-900">
+                    Something went wrong
+                </h2>
+
+                <p className="mt-2 text-sm text-red-500">
+                    {error}
+                </p>
+
+                <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                    Try Again
+                </button>
             </div>
         );
     }

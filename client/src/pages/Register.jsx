@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { registerUser } from "../services/auth.service.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
     const navigate = useNavigate();
@@ -102,7 +102,7 @@ function Register() {
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
-                            placeholder="••••••••"
+                            placeholder="Create a strong Password"
                             className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-blue-500"
                         />
                     </div>
@@ -117,19 +117,28 @@ function Register() {
                             name="confirmPassword"
                             value={formData.confirmPassword}
                             onChange={handleChange}
-                            placeholder="••••••••"
+                            placeholder="Re-enter Your Password"
                             className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-blue-500"
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full rounded-md bg-blue-600 py-2 font-medium text-white hover:bg-blue-700"
+                        className="cursor-pointer w-full rounded-md bg-blue-600 py-2 font-medium text-white hover:bg-blue-700"
                     >
                         Create Account
                     </button>
 
                 </form>
+                <p className="mt-5 text-center text-sm text-gray-500">
+                    Already have an account?{" "}
+                    <Link
+                        to="/login"
+                        className="font-medium text-blue-600 hover:text-blue-700"
+                    >
+                        Login
+                    </Link>
+                </p>
             </div>
         </div>
     );

@@ -3,6 +3,7 @@ import { useAuth } from "../context/auth.context.jsx";
 import { getProjects, deleteProject } from "../services/project.service.js";
 import ProjectCard from "../components/ProjectCard.jsx";
 import ProjectModal from "../components/ProjectModal.jsx";
+import Loading from "../components/Loading.jsx";
 
 function Projects() {
     const { accessToken } = useAuth();
@@ -54,17 +55,25 @@ function Projects() {
     };
 
     if (loading) {
-        return (
-            <div className="text-gray-600">
-                Loading projects...
-            </div>
-        );
+        return <Loading />
     }
-
     if (error) {
         return (
-            <div className="text-red-600">
-                {error}
+            <div className="rounded-xl bg-white p-10 text-center shadow-sm">
+                <h2 className="text-lg font-semibold text-gray-900">
+                    Something went wrong
+                </h2>
+
+                <p className="mt-2 text-sm text-red-500">
+                    {error}
+                </p>
+
+                <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                    Try Again
+                </button>
             </div>
         );
     }
@@ -104,6 +113,16 @@ function Projects() {
                     <p className="mt-2 text-sm text-gray-500">
                         Create your first project to get started.
                     </p>
+
+                    <button
+                        onClick={() => {
+                            setSelectedProject(null);
+                            setShowModal(true);
+                        }}
+                        className="mt-4 cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                    >
+                        + Create Project
+                    </button>
                 </div>
             ) : (
                 <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">

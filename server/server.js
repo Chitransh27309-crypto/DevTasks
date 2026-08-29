@@ -31,7 +31,7 @@ app.use("/api/v1/projects/:projectId/tasks", taskRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
 
 app.get("/", (req, res) => {
-    res.send("DevTask API is running 🚀");
+    res.send("DevTask API is running");
 });
 
 const PORT = process.env.PORT || 5000;

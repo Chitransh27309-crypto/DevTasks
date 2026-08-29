@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { loginUser } from "../services/auth.service.js";
 import { useAuth } from "../context/auth.context.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
     const { setUser, setAccessToken } = useAuth();
@@ -85,19 +85,28 @@ function Login() {
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
-                            placeholder="••••••••"
+                            placeholder="Enter your Password"
                             className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-blue-500"
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full rounded-md bg-blue-600 py-2 font-medium text-white hover:bg-blue-700"
+                        className="cursor-pointer w-full rounded-md bg-blue-600 py-2 font-medium text-white hover:bg-blue-700"
                     >
                         Login
                     </button>
 
                 </form>
+                <p className="mt-5 text-center text-sm text-gray-500">
+                    Don't have an account?{" "}
+                    <Link
+                        to="/register"
+                        className="font-medium text-blue-600 hover:text-blue-700"
+                    >
+                        Create one
+                    </Link>
+                </p>
             </div>
         </div>
     );
