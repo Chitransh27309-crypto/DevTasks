@@ -115,7 +115,7 @@ const loginUser = async (req, res) => {
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
             maxAge: Number(process.env.REFRESH_TOKEN_COOKIE_MAX_AGE)
         });
 
@@ -225,7 +225,7 @@ const refreshAccessToken = async (req, res) => {
         res.cookie("refreshToken", newRefreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
             maxAge: Number(process.env.REFRESH_TOKEN_COOKIE_MAX_AGE)
         });
 
@@ -282,7 +282,7 @@ const logoutUser = async (req, res) => {
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict"
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
         });
 
         console.log("Refresh token cookie cleared");
