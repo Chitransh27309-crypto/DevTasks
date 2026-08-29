@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { refreshAccessToken, logoutUser as logoutUserApi } from "../services/auth.service.js";
+import { setAuthHandlers } from "../services/api.js";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -10,6 +11,16 @@ export const AuthProvider = ({ children }) => {
     const restoreAttempted = useRef(false);
 
     useEffect(() => {
+        setAuthHandlers(
+            setAccessToken,
+            () => {
+                setUser(null);
+                setAccessToken(null);
+            }
+        );
+    }, []);
+
+    useEffect(() => {
         if (restoreAttempted.current) {
             return;
         }
@@ -18,9 +29,7 @@ export const AuthProvider = ({ children }) => {
 
         const restoreSession = async () => {
             try {
-                console.log("Restoring session...");
                 const data = await refreshAccessToken();
-                console.log("Session restored ");
                 setAccessToken(data.accessToken);
                 setUser(data.user);
             } catch (error) {
@@ -44,14 +53,9 @@ export const AuthProvider = ({ children }) => {
 
         const timer = setTimeout(async () => {
             try {
-                console.log("Refreshing access token...");
-
                 const data = await refreshAccessToken();
-
                 setAccessToken(data.accessToken);
                 setUser(data.user);
-
-                console.log("Access token refreshed");
 
             } catch (error) {
                 console.error(

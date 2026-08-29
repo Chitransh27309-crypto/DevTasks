@@ -268,7 +268,7 @@ const logoutUser = async (req, res) => {
 
                     await user.save();
 
-                    console.log("Refresh token invalidated ✅");
+                    console.log("Refresh token invalidated");
                 } else {
                     console.log("User not found during logout");
                 }
@@ -285,7 +285,7 @@ const logoutUser = async (req, res) => {
             sameSite: "strict"
         });
 
-        console.log("Refresh token cookie cleared ✅");
+        console.log("Refresh token cookie cleared");
 
         res.status(200).json({
             message: "Logged out successfully"
