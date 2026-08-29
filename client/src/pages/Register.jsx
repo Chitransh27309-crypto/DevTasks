@@ -35,8 +35,6 @@ function Register() {
                 password: formData.password
             });
 
-            console.log("Registration successful:", data);
-
             navigate("/login");
 
         } catch (error) {

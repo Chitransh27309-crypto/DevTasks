@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from './routes/auth.route.js';
 import projectRoutes from "./routes/project.route.js";
 import taskRoutes from "./routes/task.route.js";
-import dashboardRoutes from "./routes/dashboard.route.js"; 
+import dashboardRoutes from "./routes/dashboard.route.js";
 import cors from "cors";
 
 dotenv.config()
@@ -16,7 +16,7 @@ connectDb()
 
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: process.env.FRONTEND_URL,
         credentials: true
     })
 );
@@ -25,7 +25,7 @@ app.use(express.json())
 app.use(cookieParser());
 
 // routes
-app.use("/api/v1/auth",authRoutes)
+app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/projects/:projectId/tasks", taskRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
@@ -35,6 +35,6 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on port ${PORT}`);
 });

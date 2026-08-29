@@ -30,8 +30,6 @@ function Login() {
                 password: formData.password
             });
 
-            console.log("Login successful:", data);
-
             setUser(data.user);
             setAccessToken(data.accessToken);
 
