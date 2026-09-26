@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createProject, updateProject } from "../services/project.service.js";
 import { useAuth } from "../context/auth.context.jsx";
+import cancelButton from "../assets/letter-x.png";
 
 function ProjectModal({
     onClose,
@@ -71,9 +72,9 @@ function ProjectModal({
             onClose();
 
         } catch (error) {
-            console.error("Project save error:", error.message);
+            console.error("Project save error:", error?.message);
 
-            setError(error.message);
+            setError(error?.message);
 
         } finally {
             setLoading(false);
@@ -100,7 +101,7 @@ function ProjectModal({
                         onClick={onClose}
                         className="text-4xl cursor-pointer text-gray-400 hover:text-gray-600"
                     >
-                        ×
+                        <img src={cancelButton} alt="Cancel" className="h-4 w-4" />
                     </button>
                 </div>
 

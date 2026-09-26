@@ -5,6 +5,10 @@ import { getProjectById } from "../services/project.service.js";
 import { getTasks, deleteTask } from "../services/task.service.js";
 import TaskModal from "../components/TaskModal.jsx";
 import Loading from "../components/Loading.jsx";
+import editButton from "../assets/edit-button.png";
+import deleteButton from "../assets/delete.png";
+import cancelButton from "../assets/letter-x.png";
+import BackBtn from "../assets/back.png";
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -33,12 +37,8 @@ function ProjectDetails() {
                 const data = await getProjectById(id, accessToken);
                 setProject(data.project);
             } catch (error) {
-                console.error(
-                    "Failed to fetch project:",
-                    error.message
-                );
-
-                setError(error.message);
+                console.error("Failed to fetch project:", error?.message);
+                setError(error?.message);
             } finally {
                 setLoading(false);
             }
@@ -50,6 +50,8 @@ function ProjectDetails() {
     }, [id, accessToken]);
 
     useEffect(() => {
+        setTasksLoading(true);
+        setTasksError("");
         const fetchTasks = async () => {
             try {
                 const data = await getTasks(
@@ -66,12 +68,8 @@ function ProjectDetails() {
 
                 setTasks(data.tasks);
             } catch (error) {
-                console.error(
-                    "Failed to fetch tasks:",
-                    error.message
-                );
-
-                setTasksError(error.message);
+                console.error("Failed to fetch tasks:", error?.message);
+                setTasksError(error?.message);
             } finally {
                 setTasksLoading(false);
             }
@@ -90,21 +88,12 @@ function ProjectDetails() {
                 accessToken
             );
 
-            setTasks((prevTasks) =>
-                prevTasks.filter(
-                    (task) => task._id !== deletingTask._id
-                )
-            );
-
+            setTasks((prevTasks) => prevTasks.filter((task) => task._id !== deletingTask._id));
             setDeletingTask(null);
 
         } catch (error) {
-            console.error(
-                "Delete task error:",
-                error.message
-            );
-
-            alert(error.message);
+            console.error("Delete task error:", error?.message);
+            alert(error?.message);
         }
     };
 
@@ -115,20 +104,47 @@ function ProjectDetails() {
     if (error) {
         return (
             <div className="space-y-4">
-                <p className="text-red-600">
-                    {error}
-                </p>
+                <p className="text-red-600"> {error} </p>
 
                 <button
                     onClick={() => navigate("/projects")}
                     className="rounded-lg bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-900"
                 >
+                    <img src={BackBtn} alt="Back" className="h-4 w-4" />
                     Back to Projects
                 </button>
             </div>
         );
     }
-
+    const taskColumns = [
+        {
+            status: "todo",
+            title: "Todo",
+            bg: "bg-red-300",
+            priorityBgL: "bg-red-100",
+            priorityBgM: "bg-red-200",
+            priorityBgH: "bg-red-300",
+            priorityText: "text-red-900"
+        },
+        {
+            status: "in-progress",
+            title: "In Progress",
+            bg: "bg-blue-200",
+            priorityBgL: "bg-yellow-100",
+            priorityBgM: "bg-yellow-200",
+            priorityBgH: "bg-yellow-300",
+            priorityText: "text-yellow-900"
+        },
+        {
+            status: "completed",
+            title: "Completed",
+            bg: "bg-green-100",
+            priorityBgL: "bg-green-100",
+            priorityBgM: "bg-green-200",
+            priorityBgH: "bg-green-300",
+            priorityText: "text-green-900"
+        }
+    ];
     return (
         <div className="space-y-6">
 
@@ -137,7 +153,7 @@ function ProjectDetails() {
                 onClick={() => navigate("/projects")}
                 className="cursor-pointer text-sm font-medium text-gray-500 hover:text-gray-800"
             >
-                ←  Back to Projects
+                <img src={BackBtn} alt="Back" className="h-4 w-4 inline-block mr-1" /> back to Projects
             </button>
 
             {/* Project Header */}
@@ -146,13 +162,8 @@ function ProjectDetails() {
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">
-                            {project.name}
-                        </h1>
-
-                        <p className="mt-2 text-sm text-gray-500">
-                            {project.description || "No description"}
-                        </p>
+                        <h1 className="text-2xl font-bold text-gray-900"> {project.name} </h1>
+                        <p className="mt-2 text-sm text-gray-500"> {project.description || "No description"} </p>
                     </div>
 
                     <button
@@ -219,21 +230,10 @@ function ProjectDetails() {
                         onChange={(e) => setStatus(e.target.value)}
                         className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
                     >
-                        <option value="">
-                            All Status
-                        </option>
-
-                        <option value="todo">
-                            Todo
-                        </option>
-
-                        <option value="in-progress">
-                            In Progress
-                        </option>
-
-                        <option value="completed">
-                            Completed
-                        </option>
+                        <option value=""> All Status</option>
+                        <option value="todo"> Todo</option>
+                        <option value="in-progress"> In Progress</option>
+                        <option value="completed"> Completed </option>
                     </select>
 
                     <select
@@ -241,21 +241,10 @@ function ProjectDetails() {
                         onChange={(e) => setPriority(e.target.value)}
                         className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
                     >
-                        <option value="">
-                            All Priorities
-                        </option>
-
-                        <option value="low">
-                            Low
-                        </option>
-
-                        <option value="medium">
-                            Medium
-                        </option>
-
-                        <option value="high">
-                            High
-                        </option>
+                        <option value=""> All Priorities </option>
+                        <option value="low">  Low </option>
+                        <option value="medium"> Medium </option>
+                        <option value="high"> High</option>
                     </select>
 
                     <select
@@ -268,29 +257,12 @@ function ProjectDetails() {
                         }}
                         className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
                     >
-                        <option value="createdAt-desc">
-                            Newest First
-                        </option>
-
-                        <option value="createdAt-asc">
-                            Oldest First
-                        </option>
-
-                        <option value="dueDate-asc">
-                            Earliest Due Date
-                        </option>
-
-                        <option value="dueDate-desc">
-                            Latest Due Date
-                        </option>
-
-                        <option value="title-asc">
-                            Title A-Z
-                        </option>
-
-                        <option value="title-desc">
-                            Title Z-A
-                        </option>
+                        <option value="createdAt-desc"> Newest First</option>
+                        <option value="createdAt-asc">  Oldest First  </option>
+                        <option value="dueDate-asc"> Earliest Due Date </option>
+                        <option value="dueDate-desc"> Latest Due Date </option>
+                        <option value="title-asc"> Title A-Z </option>
+                        <option value="title-desc"> Title Z-A </option>
                     </select>
 
                 </div>
@@ -322,183 +294,79 @@ function ProjectDetails() {
                                 + Add Task
                             </button>
                         </div>
-                    ) : (
-                        <div className="space-y-3">
-                            {<div className="grid gap-4 lg:grid-cols-3">
-                                {/* TODO */}
-                                <div className="rounded-xl bg-gray-100 p-4">
-                                    <div className="mb-4 flex items-center justify-between">
-                                        <h3 className="font-semibold text-gray-900">
-                                            Todo
-                                        </h3>
+                    ) : (<div className="grid gap-4 lg:grid-cols-3">
+                        {taskColumns.map((column) => (
+                            <div
+                                key={column.status}
+                                className={`rounded-xl ${column.bg} p-4`}
+                            >
+                                <div className="mb-4 flex items-center justify-between">
+                                    <h3 className="font-semibold text-gray-900">
+                                        {column.title}
+                                    </h3>
 
-                                        <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-gray-500">
-                                            {tasks.filter((task) => task.status === "todo").length}
-                                        </span>
-                                    </div>
+                                    <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-gray-500">
+                                        {tasks.filter((task) => task.status === column.status).length}
+                                    </span>
+                                </div>
 
-                                    <div className="space-y-3">
-                                        {tasks
-                                            .filter((task) => task.status === "todo")
-                                            .map((task) => (
-                                                <div
-                                                    key={task._id}
-                                                    className="rounded-lg bg-white p-4 shadow-sm"
-                                                >
+                                <div className="space-y-3">
+                                    {tasks
+                                        .filter((task) => task.status === column.status)
+                                        .map((task) => (
+                                            <div
+                                                key={task._id}
+                                                className="rounded-lg bg-white p-4 shadow-sm"
+                                            >
+                                                <div className="flex items-center justify-between">
                                                     <h4 className="font-medium text-gray-900">
                                                         {task.title}
                                                     </h4>
-
-                                                    <p className="mt-1 text-sm text-gray-500">
-                                                        {task.description || "No description"}
-                                                    </p>
-
-                                                    <div className="mt-3">
-                                                        <span className="rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-600">
-                                                            {task.priority}
-                                                        </span>
-                                                    </div>
-                                                    <div className="mt-4 flex gap-2">
-                                                        <button
-                                                            onClick={() => {
-                                                                setSelectedTask(task);
-                                                                setShowTaskModal(true);
-                                                            }}
-                                                            className="cursor-pointer rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-                                                        >
-                                                            Edit
-                                                        </button>
-
-                                                        <button
-                                                            onClick={() => setDeletingTask(task)}
-                                                            className="cursor-pointer rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </div>
+                                                    <span
+                                                        className={`rounded-full ${task.priority === "low" ? column.priorityBgL : task.priority === "medium" ? column.priorityBgM : column.priorityBgH} px-2.5 py-1 text-xs font-medium ${column.priorityText}`}
+                                                    >
+                                                        {task.priority}
+                                                    </span>
                                                 </div>
-                                            ))}
-                                    </div>
-                                </div>
 
-                                {/* IN PROGRESS */}
-                                <div className="rounded-xl bg-blue-100 p-4">
-                                    <div className="mb-4 flex items-center justify-between">
-                                        <h3 className="font-semibold text-gray-900">
-                                            In Progress
-                                        </h3>
 
-                                        <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-gray-500">
-                                            {tasks.filter(
-                                                (task) => task.status === "in-progress"
-                                            ).length}
-                                        </span>
-                                    </div>
+                                                <p className="mt-1 text-sm text-gray-500">
+                                                    {task.description || "No description"}
+                                                </p>
 
-                                    <div className="space-y-3">
-                                        {tasks
-                                            .filter((task) => task.status === "in-progress")
-                                            .map((task) => (
-                                                <div
-                                                    key={task._id}
-                                                    className="rounded-lg bg-white p-4 shadow-sm"
-                                                >
-                                                    <h4 className="font-medium text-gray-900">
-                                                        {task.title}
-                                                    </h4>
+                                                <div className="mt-3">
 
-                                                    <p className="mt-1 text-sm text-gray-500">
-                                                        {task.description || "No description"}
-                                                    </p>
-
-                                                    <div className="mt-3">
-                                                        <span className="rounded-full bg-yellow-50 px-2.5 py-1 text-xs font-medium text-yellow-600">
-                                                            {task.priority}
-                                                        </span>
-                                                    </div>
-                                                    <div className="mt-4 flex gap-2">
-                                                        <button
-                                                            onClick={() => {
-                                                                setSelectedTask(task);
-                                                                setShowTaskModal(true);
-                                                            }}
-                                                            className="cursor-pointer rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-                                                        >
-                                                            Edit
-                                                        </button>
-
-                                                        <button
-                                                            onClick={() => setDeletingTask(task)}
-                                                            className="cursor-pointer rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </div>
+                                                    {task.dueDate && (
+                                                        <p className="mt-2 text-sm text-gray-500">
+                                                            Due: {new Date(task.dueDate).toLocaleDateString()}
+                                                        </p>
+                                                    )}
                                                 </div>
-                                            ))}
-                                    </div>
-                                </div>
 
-                                {/* COMPLETED */}
-                                <div className="rounded-xl bg-green-100 p-4">
-                                    <div className="mb-4 flex items-center justify-between">
-                                        <h3 className="font-semibold text-gray-900">
-                                            Completed
-                                        </h3>
+                                                <div className="mt-4 flex gap-2">
+                                                    <button
+                                                        onClick={() => {
+                                                            setSelectedTask(task);
+                                                            setShowTaskModal(true);
+                                                        }}
+                                                        className="cursor-pointer rounded-lg px-3 py-1.5 hover:bg-gray-100"
+                                                    >
+                                                        <img src={editButton} alt="Edit" className="h-4 w-4" />
+                                                    </button>
 
-                                        <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-gray-500">
-                                            {tasks.filter(
-                                                (task) => task.status === "completed"
-                                            ).length}
-                                        </span>
-                                    </div>
-
-                                    <div className="space-y-3">
-                                        {tasks
-                                            .filter((task) => task.status === "completed")
-                                            .map((task) => (
-                                                <div
-                                                    key={task._id}
-                                                    className="rounded-lg bg-white p-4 shadow-sm"
-                                                >
-                                                    <h4 className="font-medium text-gray-900">
-                                                        {task.title}
-                                                    </h4>
-
-                                                    <p className="mt-1 text-sm text-gray-500">
-                                                        {task.description || "No description"}
-                                                    </p>
-
-                                                    <div className="mt-3">
-                                                        <span className="rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600">
-                                                            {task.priority}
-                                                        </span>
-                                                    </div>
-                                                    <div className="mt-4 flex gap-2">
-                                                        <button
-                                                            onClick={() => {
-                                                                setSelectedTask(task);
-                                                                setShowTaskModal(true);
-                                                            }}
-                                                            className="cursor-pointer rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-                                                        >
-                                                            Edit
-                                                        </button>
-
-                                                        <button
-                                                            onClick={() => setDeletingTask(task)}
-                                                            className="cursor-pointer rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </div>
+                                                    <button
+                                                        onClick={() => setDeletingTask(task)}
+                                                        className="cursor-pointer rounded-lg px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100"
+                                                    >
+                                                        <img src={deleteButton} alt="Delete" className="h-4 w-4" />
+                                                    </button>
                                                 </div>
-                                            ))}
-                                    </div>
+                                            </div>
+                                        ))}
                                 </div>
-                            </div>}
-                        </div>
-                    )}
+                            </div>
+                        ))}
+                    </div>)}
                 </div>
             </div>
 
@@ -531,10 +399,19 @@ function ProjectDetails() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
                     <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
 
-                        <h2 className="text-xl font-semibold text-gray-900">
-                            Delete Task?
-                        </h2>
+                        <div className="mb-6 flex items-center justify-between">
+                            <div>
+                                <h2 className="text-xl font-semibold text-gray-900"> Delete Task? </h2>
+                            </div>
 
+                            <button
+                                type="button"
+                                onClick={() => setDeletingTask(null)}
+                                className="cursor-pointer text-3xl text-gray-400 hover:text-gray-600"
+                            >
+                                <img src={cancelButton} alt="Cancel" className="h-4 w-4" />
+                            </button>
+                        </div>
                         <p className="mt-2 text-sm text-gray-500">
                             Are you sure you want to delete{" "}
                             <span className="font-medium text-gray-700">
@@ -542,24 +419,15 @@ function ProjectDetails() {
                             </span>
                             ?
                         </p>
-
-                        <p className="mt-2 text-sm text-red-500">
-                            This action cannot be undone.
-                        </p>
+                        <p className="mt-2 text-sm text-red-500"> This action cannot be undone. </p>
 
                         <div className="mt-6 flex justify-end gap-3">
-                            <button
-                                onClick={() => setDeletingTask(null)}
-                                className="cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                            >
-                                Cancel
-                            </button>
 
                             <button
                                 onClick={handleDeleteTask}
-                                className="cursor-pointer rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                                className="cursor-pointer rounded-lg bg-red-300 px-4 py-2  hover:bg-red-500"
                             >
-                                Delete
+                                <img src={deleteButton} alt="Delete" className="h-4 w-4" />
                             </button>
 
                         </div>

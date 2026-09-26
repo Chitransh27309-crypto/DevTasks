@@ -4,6 +4,8 @@ import { getProjects, deleteProject } from "../services/project.service.js";
 import ProjectCard from "../components/ProjectCard.jsx";
 import ProjectModal from "../components/ProjectModal.jsx";
 import Loading from "../components/Loading.jsx";
+import deleteButton from "../assets/delete.png";
+import cancelButton from "../assets/letter-x.png";
 
 function Projects() {
     const { accessToken } = useAuth();
@@ -22,9 +24,9 @@ function Projects() {
 
                 setProjects(data.projects);
             } catch (error) {
-                console.error("Failed to fetch projects:", error.message);
+                console.error("Failed to fetch projects:", error?.message);
 
-                setError(error.message);
+                setError(error?.message);
             } finally {
                 setLoading(false);
             }
@@ -49,8 +51,8 @@ function Projects() {
             setDeletingProject(null);
 
         } catch (error) {
-            console.error("Delete project error:", error.message);
-            alert(error.message);
+            console.error("Delete project error:", error?.message);
+            alert(error?.message);
         }
     };
 
@@ -169,9 +171,21 @@ function Projects() {
             {deletingProject && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
                     <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-                        <h2 className="text-xl font-semibold text-gray-900">
-                            Delete Project?
-                        </h2>
+                        <div className="mb-6 flex items-center justify-between">
+                            <div>
+                                <h2 className="text-xl font-semibold text-gray-900">
+                                    Delete Project?
+                                </h2>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() => setDeletingProject(null)}
+                                className="cursor-pointer text-3xl text-gray-400 hover:text-gray-600"
+                            >
+                                <img src={cancelButton} alt="Cancel" className="h-4 w-4" />
+                            </button>
+                        </div>
 
                         <p className="mt-2 text-sm text-gray-500">
                             Are you sure you want to delete{" "}
@@ -186,18 +200,12 @@ function Projects() {
                         </p>
 
                         <div className="mt-6 flex justify-end gap-3">
-                            <button
-                                onClick={() => setDeletingProject(null)}
-                                className="cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                            >
-                                Cancel
-                            </button>
 
                             <button
                                 onClick={handleDelete}
-                                className="cursor-pointer rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                                className="cursor-pointer rounded-lg bg-red-400 px-4 py-2 hover:bg-red-700"
                             >
-                                Delete
+                                <img src={deleteButton} alt="Delete" className="h-4 w-4" />
                             </button>
                         </div>
                     </div>

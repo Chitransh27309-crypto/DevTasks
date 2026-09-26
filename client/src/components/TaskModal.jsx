@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createTask, updateTask } from "../services/task.service.js";
 import { useAuth } from "../context/auth.context.jsx";
+import cancelButton from "../assets/letter-x.png";
 
 function TaskModal({
     projectId,
@@ -75,9 +76,9 @@ function TaskModal({
             onClose();
 
         } catch (error) {
-            console.error("Task save error:", error.message);
+            console.error("Task save error:", error?.message);
 
-            setError(error.message);
+            setError(error?.message);
 
         } finally {
             setLoading(false);
@@ -104,9 +105,9 @@ function TaskModal({
                     <button
                         type="button"
                         onClick={onClose}
-                        className="cursor-pointer text-xl text-gray-400 hover:text-gray-600"
+                        className="cursor-pointer text-3xl text-gray-400 hover:text-gray-600"
                     >
-                        ×
+                        <img src={cancelButton} alt="Cancel" className="h-4 w-4" />
                     </button>
                 </div>
 

@@ -20,8 +20,8 @@ function Dashboard() {
                 setStats(data.stats);
 
             } catch (error) {
-                console.error("Failed to fetch dashboard stats:", error.message);
-                setError(error.message)
+                console.error("Failed to fetch dashboard stats:", error?.message);
+                setError(error?.message)
 
             } finally {
                 setLoading(false);

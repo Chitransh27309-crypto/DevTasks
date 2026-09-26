@@ -6,14 +6,12 @@ const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        // Check if all fields are provided
         if (!name || !email || !password) {
             return res.status(400).json({
                 message: "All fields are required",
             });
         }
 
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
@@ -22,10 +20,8 @@ const registerUser = async (req, res) => {
             });
         }
 
-        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user
         const user = await User.create({
             name,
             email,
@@ -50,16 +46,15 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     try {
+        // console.log(req)
         const { email, password } = req.body;
 
-        // 1. Check fields
         if (!email || !password) {
             return res.status(400).json({
                 message: "Email and password are required"
             });
         }
 
-        // 2. Find user
         const user = await User.findOne({ email });
 
         if (!user) {
@@ -68,7 +63,6 @@ const loginUser = async (req, res) => {
             });
         }
 
-        // 3. Compare password
         const isPasswordCorrect = await bcrypt.compare(
             password,
             user.password
@@ -80,38 +74,30 @@ const loginUser = async (req, res) => {
             });
         }
 
-        // 4. Create access token
         const accessToken = jwt.sign(
             { userId: user._id },
             process.env.JWT_SECRET,
-            {
-                expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN
-            }
+            { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN }
         );
 
-        // 5. Create refresh token
         const refreshToken = jwt.sign(
             { userId: user._id },
             process.env.JWT_REFRESH_SECRET,
             { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN }
         );
 
-        // 6. Hash refresh token before storing it
         const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
 
-        // 7. Calculate refresh token expiry
         const refreshTokenExpiresAt = new Date(
             Date.now() +
             Number(process.env.REFRESH_TOKEN_COOKIE_MAX_AGE)
         );
 
-        // 8. Store refresh token hash + expiry in database
         user.refreshTokenHash = refreshTokenHash;
         user.refreshTokenExpiresAt = refreshTokenExpiresAt;
 
         await user.save();
 
-        // 9. Send refresh token as HttpOnly cookie
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
@@ -119,7 +105,6 @@ const loginUser = async (req, res) => {
             maxAge: Number(process.env.REFRESH_TOKEN_COOKIE_MAX_AGE)
         });
 
-        // 10. Send access token
         res.status(200).json({
             message: "Login successful",
             accessToken,
@@ -141,7 +126,7 @@ const loginUser = async (req, res) => {
 
 const refreshAccessToken = async (req, res) => {
     try {
-        // 1. Get refresh token from cookie
+
         const refreshToken = req.cookies.refreshToken;
 
         if (!refreshToken) {
@@ -150,13 +135,11 @@ const refreshAccessToken = async (req, res) => {
             });
         }
 
-        // 2. Verify refresh token JWT
         const decoded = jwt.verify(
             refreshToken,
             process.env.JWT_REFRESH_SECRET
         );
 
-        // 3. Find the user
         const user = await User.findById(decoded.userId);
 
         if (!user || !user.refreshTokenHash) {
@@ -165,17 +148,12 @@ const refreshAccessToken = async (req, res) => {
             });
         }
 
-        // 4. Check whether refresh token has expired
-        if (
-            !user.refreshTokenExpiresAt ||
-            user.refreshTokenExpiresAt < new Date()
-        ) {
+        if (!user.refreshTokenExpiresAt || (user.refreshTokenExpiresAt < new Date())) {
             return res.status(401).json({
                 message: "Refresh token expired"
             });
         }
 
-        // 5. Compare cookie token with stored hash
         const isRefreshTokenValid = await bcrypt.compare(
             refreshToken,
             user.refreshTokenHash
@@ -187,7 +165,6 @@ const refreshAccessToken = async (req, res) => {
             });
         }
 
-        // 6. Create new access token
         const accessToken = jwt.sign(
             { userId: user._id },
             process.env.JWT_SECRET,
@@ -196,22 +173,14 @@ const refreshAccessToken = async (req, res) => {
             }
         );
 
-        // 7. Create new refresh token
         const newRefreshToken = jwt.sign(
             { userId: user._id },
             process.env.JWT_REFRESH_SECRET,
-            {
-                expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN
-            }
+            { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN }
         );
 
-        // 8. Hash the new refresh token
-        const newRefreshTokenHash = await bcrypt.hash(
-            newRefreshToken,
-            10
-        );
+        const newRefreshTokenHash = await bcrypt.hash(newRefreshToken, 10);
 
-        // 9. Save the new refresh-token state
         user.refreshTokenHash = newRefreshTokenHash;
 
         user.refreshTokenExpiresAt = new Date(
@@ -221,7 +190,6 @@ const refreshAccessToken = async (req, res) => {
 
         await user.save();
 
-        // 10. Replace old cookie with new refresh token
         res.cookie("refreshToken", newRefreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
@@ -229,7 +197,6 @@ const refreshAccessToken = async (req, res) => {
             maxAge: Number(process.env.REFRESH_TOKEN_COOKIE_MAX_AGE)
         });
 
-        // 11. Send new access token
         res.status(200).json({
             accessToken,
             user: {
@@ -252,7 +219,6 @@ const logoutUser = async (req, res) => {
     try {
         const refreshToken = req.cookies.refreshToken;
 
-        // If a refresh token exists, invalidate it server-side
         if (refreshToken) {
             try {
                 const decoded = jwt.verify(
@@ -278,7 +244,6 @@ const logoutUser = async (req, res) => {
             }
         }
 
-        // Clear browser cookie
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",

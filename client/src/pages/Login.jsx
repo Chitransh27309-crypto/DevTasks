@@ -36,19 +36,19 @@ function Login() {
             navigate("/dashboard");
 
         } catch (error) {
-            console.error("Login error:", error.message);
-            alert(error.message);
+            console.error("Login error:", error?.message);
+            alert(error?.message);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="min-h-screen flex items-center justify-center bg-gray-300">
             <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
 
                 <h1 className="mb-2 text-3xl font-bold text-gray-900">
                     Welcome Back
                 </h1>
-
+                
                 <p className="mb-6 text-gray-500">
                     Login to your DevTask account
                 </p>
@@ -100,7 +100,7 @@ function Login() {
                     Don't have an account?{" "}
                     <Link
                         to="/register"
-                        className="font-medium text-blue-600 hover:text-blue-700"
+                        className="font-medium text-blue-500 hover:text-blue-700"
                     >
                         Create one
                     </Link>
