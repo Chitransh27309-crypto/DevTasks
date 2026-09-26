@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth.context.jsx";
+import hamburgerIcon from "../assets/hamburger.png";
+import logoutIcon from "../assets/logout.png";
 
 function Navbar({ onMenuClick }) {
     const { user, logoutUser } = useAuth();
@@ -20,9 +22,8 @@ function Navbar({ onMenuClick }) {
                     className="cursor-pointer rounded-lg p-2 text-gray-600 hover:bg-gray-100 md:hidden"
                     aria-label="Open menu"
                 >
-                    ☰
+                    <img src={hamburgerIcon} alt="Menu" className="h-8 w-8" />
                 </button>
-
                 <h2 className="text-lg font-semibold text-gray-800">
                     DevTask
                 </h2>
@@ -36,9 +37,12 @@ function Navbar({ onMenuClick }) {
 
                 <button
                     onClick={handleLogout}
-                    className="cursor-pointer rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+                    className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-red-400 bg-red-50 hover:bg-red-100"
                 >
-                    Logout
+                    <div className="flex items-center gap-2">
+                        <img src={logoutIcon} alt="Logout" className="h-4 w-4" />
+                        <p>Logout</p>
+                    </div>
                 </button>
             </div>
         </header>

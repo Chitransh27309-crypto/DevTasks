@@ -6,6 +6,7 @@ import ProjectModal from "../components/ProjectModal.jsx";
 import Loading from "../components/Loading.jsx";
 import deleteButton from "../assets/delete.png";
 import cancelButton from "../assets/letter-x.png";
+import addIcon from "../assets/plus.png";
 
 function Projects() {
     const { accessToken } = useAuth();
@@ -99,9 +100,9 @@ function Projects() {
                         setSelectedProject(null);
                         setShowModal(true);
                     }}
-                    className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                    className="cursor-pointer rounded-lg bg-blue-400 px-4 py-2 text-center font-medium text-white hover:bg-blue-500"
                 >
-                    + New Project
+                    <img src={addIcon} alt="Add" className="h-5 w-5 white" />
                 </button>
             </div>
 
@@ -121,9 +122,9 @@ function Projects() {
                             setSelectedProject(null);
                             setShowModal(true);
                         }}
-                        className="mt-4 cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                        className="mt-4 cursor-pointer rounded-lg bg-blue-400 px-4 py-2 text-center font-medium text-white hover:bg-blue-500"
                     >
-                        + Create Project
+                        <img src={addIcon} alt="Add" className="h-5 w-5" />
                     </button>
                 </div>
             ) : (
