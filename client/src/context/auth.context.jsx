@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
         try {
             await logoutUserApi();
         } catch (error) {
-            console.error("Logout error:", error.message);
+            console.error("Logout error:", error?.message);
         } finally {
             setUser(null);
             setAccessToken(null);

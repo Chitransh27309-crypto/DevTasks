@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 const API_URL = import.meta.env.VITE_API_URL
 
 let updateAccessToken = null;
@@ -47,9 +45,6 @@ export const apiRequest = async (
     if (accessToken) {
         headers.Authorization = `Bearer ${accessToken}`;
     }
-    // console.log(options)
-    // console.log(headers)
-
     const response = await fetch(`${API_URL}${endpoint}`, {
        ...options,
         credentials: "include",

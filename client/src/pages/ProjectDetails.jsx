@@ -10,6 +10,7 @@ import deleteButton from "../assets/delete.png";
 import cancelButton from "../assets/letter-x.png";
 import BackBtn from "../assets/back.png";
 import addIcon from "../assets/plus.png";
+import searchIcon from "../assets/search.png";
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -218,30 +219,52 @@ function ProjectDetails() {
                 </div>
                 <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
 
-                    <input
-                        type="text"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search tasks..."
-                        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
-                    />
+                    <div className="flex h-12 w-92.5 max-w-full items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 shadow-sm transition-all duration-200 hover:border-blue-500 hover:shadow-md focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10">
+                        <img
+                            src={searchIcon}
+                            alt="Search"
+                            className="h-5 w-5 shrink-0 transition-opacity duration-200 group-focus-within:opacity-100"
+                        />
 
+                        <input
+                            type="text"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Search tasks..."
+                            className="w-full bg-transparent text-sm text-gray-700 placeholder:text-gray-400 outline-none"
+                        />
+
+                        {search && (
+                            <button
+                                type="button"
+                                onClick={() => setSearch("")}
+                                className="cursor-pointer rounded-full px-2"
+                            >
+                                {cancelButton && (
+                                    <img
+                                        src={cancelButton}
+                                        alt="Cancel"
+                                        className="h-4 w-5"
+                                    />
+                                )}
+                            </button>
+                        )}
+                    </div>
                     <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
-                        className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
+                        className="h-12 w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-4 text-sm text-gray-700 shadow-sm outline-none transition-all duration-200 hover:border-blue-500 hover:shadow-md focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                     >
-                        <option value=""> All Status</option>
-                        <option value="todo"> Todo</option>
-                        <option value="in-progress"> In Progress</option>
-                        <option value="completed"> Completed </option>
+                        <option value="">All Status</option>
+                        <option value="todo">Todo</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
                     </select>
 
                     <select
                         value={priority}
                         onChange={(e) => setPriority(e.target.value)}
-                        className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
-                    >
+                        className="h-12 w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-4 text-sm text-gray-700 shadow-sm outline-none transition-all duration-200 hover:border-blue-500 hover:shadow-md focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"                    >
                         <option value=""> All Priorities </option>
                         <option value="low">  Low </option>
                         <option value="medium"> Medium </option>
@@ -256,8 +279,7 @@ function ProjectDetails() {
                             setSort(newSort);
                             setOrder(newOrder);
                         }}
-                        className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm outline-none focus:border-blue-500"
-                    >
+                        className="h-12 w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-4 text-sm text-gray-700 shadow-sm outline-none transition-all duration-200 hover:border-blue-500 hover:shadow-md focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"                    >
                         <option value="createdAt-desc"> Newest First</option>
                         <option value="createdAt-asc">  Oldest First  </option>
                         <option value="dueDate-asc"> Earliest Due Date </option>
@@ -317,7 +339,7 @@ function ProjectDetails() {
                                         .map((task) => (
                                             <div
                                                 key={task._id}
-                                                className="rounded-lg bg-white p-4 shadow-sm"
+                                                className="rounded-lg bg-white p-4 shadow-sm hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200"
                                             >
                                                 <div className="flex items-center justify-between">
                                                     <h4 className="font-medium text-gray-900">
