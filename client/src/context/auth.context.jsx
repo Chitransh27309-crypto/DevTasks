@@ -47,9 +47,7 @@ export const AuthProvider = ({ children }) => {
             return;
         }
 
-        const refreshInterval = Number(
-            import.meta.env.VITE_ACCESS_TOKEN_REFRESH_INTERVAL
-        );
+        const refreshInterval = Number(import.meta.env.VITE_ACCESS_TOKEN_REFRESH_INTERVAL);
 
         const timer = setTimeout(async () => {
             try {

@@ -10,14 +10,12 @@ const createProject = async (req, res) => {
             deadline
         } = req.body;
 
-        // 1. Validate required field
         if (!name) {
             return res.status(400).json({
                 message: "Project name is required"
             });
         }
 
-        // 2. Create project
         const project = await Project.create({
             name,
             description,
@@ -26,7 +24,6 @@ const createProject = async (req, res) => {
             owner: req.user
         });
 
-        // 3. Send response
         res.status(201).json({
             message: "Project created successfully",
             project

@@ -45,9 +45,7 @@ function Projects() {
                 accessToken
             );
             setProjects((prevProjects) =>
-                prevProjects.filter(
-                    (project) => project._id !== deletingProject._id
-                )
+                prevProjects.filter((project) => project._id !== deletingProject._id)
             );
             setDeletingProject(null);
 
@@ -83,7 +81,6 @@ function Projects() {
 
     return (
         <div className="space-y-6">
-            {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">
@@ -106,7 +103,6 @@ function Projects() {
                 </button>
             </div>
 
-            {/* Projects */}
             {projects.length === 0 ? (
                 <div className="rounded-xl bg-white p-10 text-center shadow-sm">
                     <h2 className="text-lg font-semibold text-gray-900">
@@ -159,11 +155,7 @@ function Projects() {
                     }}
                     onProjectUpdated={(updatedProject) => {
                         setProjects((prevProjects) =>
-                            prevProjects.map((project) =>
-                                project._id === updatedProject._id
-                                    ? updatedProject
-                                    : project
-                            )
+                            prevProjects.map((project) => project._id === updatedProject._id ? updatedProject : project)
                         );
                     }}
                 />

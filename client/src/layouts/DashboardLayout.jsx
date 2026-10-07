@@ -10,12 +10,10 @@ function DashboardLayout() {
     return (
         <div className="flex min-h-screen bg-gray-100">
 
-            {/* Desktop sidebar */}
             <div className="hidden md:block">
                 <Sidebar />
             </div>
 
-            {/* Mobile sidebar */}
             {sidebarOpen && (
                 <div
                     className="fixed inset-0 z-40 bg-black/40 md:hidden"

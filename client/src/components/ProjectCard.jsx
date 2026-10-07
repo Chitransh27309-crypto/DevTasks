@@ -18,7 +18,7 @@ function ProjectCard({ project, onEdit, onDelete }) {
             </p>
 
             <div className="mt-4 flex flex-wrap gap-2">
-                {project.technologies?.map((technology) => (
+                {[...new Set(project.technologies)]?.map((technology) => (
                     <span
                         key={technology}
                         className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600"

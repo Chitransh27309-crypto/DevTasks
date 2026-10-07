@@ -91,9 +91,7 @@ function ProjectModal({
                         </h2>
 
                         <p className="mt-1 text-sm text-gray-500">
-                            {project
-                                ? "Update your project details."
-                                : "Add a new project to your workspace."}
+                            {project ? "Update your project details." : "Add a new project to your workspace."}
                         </p>
                     </div>
 

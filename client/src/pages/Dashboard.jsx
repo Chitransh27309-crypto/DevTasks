@@ -63,7 +63,6 @@ function Dashboard() {
                 <p className="mt-1 text-sm text-gray-500">Here's an overview of your DevTask workspace</p>
             </div>
 
-            {/* Stats */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <div className="rounded-xl bg-white p-5 shadow-sm">
                     <p className="text-sm text-gray-500">
@@ -106,7 +105,6 @@ function Dashboard() {
                 </div>
             </div>
 
-            {/* Progress */}
             <div className="rounded-xl bg-white p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                     <div>
@@ -127,7 +125,6 @@ function Dashboard() {
                 </div>
             </div>
 
-            {/* Quick actions */}
             <div className="grid gap-4 sm:grid-cols-2">
                 <div className="rounded-xl bg-white p-6 shadow-sm">
                     <h2 className="text-lg font-semibold text-gray-900">

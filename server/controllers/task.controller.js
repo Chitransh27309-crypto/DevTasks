@@ -13,14 +13,12 @@ const createTask = async (req, res) => {
             dueDate
         } = req.body;
 
-        // 1. Check required field
         if (!title) {
             return res.status(400).json({
                 message: "Task title is required"
             });
         }
 
-        // 2. Check that the project belongs to the logged-in user
         const project = await Project.findOne({
             _id: projectId,
             owner: req.user
@@ -32,7 +30,6 @@ const createTask = async (req, res) => {
             });
         }
 
-        // 3. Create task
         const task = await Task.create({
             title,
             description,
@@ -43,7 +40,6 @@ const createTask = async (req, res) => {
             owner: req.user
         });
 
-        // 4. Send response
         res.status(201).json({
             message: "Task created successfully",
             task
@@ -64,7 +60,6 @@ const getTasks = async (req, res) => {
 
         const { status, priority, search, sort = "createdAt", order = "desc" } = req.query;
 
-        // Check that the project belongs to the logged-in user
         const project = await Project.findOne({
             _id: projectId,
             owner: req.user
@@ -152,7 +147,6 @@ const updateTask = async (req, res) => {
             dueDate
         } = req.body;
 
-        // 1. Check that the project belongs to the logged-in user
         const project = await Project.findOne({
             _id: projectId,
             owner: req.user
@@ -164,7 +158,6 @@ const updateTask = async (req, res) => {
             });
         }
 
-        // 2. Find the task inside this project and owned by this user
         const task = await Task.findOne({
             _id: taskId,
             project: projectId,
@@ -177,7 +170,7 @@ const updateTask = async (req, res) => {
             });
         }
 
-        // 3. Update only provided fields
+        // Update only provided fields
         if (title !== undefined) {
             task.title = title;
         }
@@ -198,7 +191,6 @@ const updateTask = async (req, res) => {
             task.dueDate = dueDate;
         }
 
-        // 4. Save changes
         await task.save();
 
         res.status(200).json({
@@ -219,7 +211,6 @@ const deleteTask = async (req, res) => {
     try {
         const { projectId, taskId } = req.params;
 
-        // Check project ownership
         const project = await Project.findOne({
             _id: projectId,
             owner: req.user
@@ -231,7 +222,6 @@ const deleteTask = async (req, res) => {
             });
         }
 
-        // Delete only if task belongs to this project and user
         const task = await Task.findOneAndDelete({
             _id: taskId,
             project: projectId,

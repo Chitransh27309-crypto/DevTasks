@@ -6,7 +6,6 @@ const getDashboardStats = async (req, res) => {
     try {
         const userId = new mongoose.Types.ObjectId(req.user);
 
-        // Count user's projects
         const totalProjects = await Project.countDocuments({
             owner: userId
         });

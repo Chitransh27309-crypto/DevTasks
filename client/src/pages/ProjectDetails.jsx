@@ -150,7 +150,6 @@ function ProjectDetails() {
     return (
         <div className="space-y-6">
 
-            {/* Back */}
             <button
                 onClick={() => navigate("/projects")}
                 className="cursor-pointer text-sm font-medium text-gray-500 hover:text-gray-800"
@@ -158,7 +157,6 @@ function ProjectDetails() {
                 <img src={BackBtn} alt="Back" className="h-4 w-4 inline-block mr-1" /> back to Projects
             </button>
 
-            {/* Project Header */}
             <div className="rounded-xl bg-white p-6 shadow-sm">
 
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -180,9 +178,8 @@ function ProjectDetails() {
 
                 </div>
 
-                {/* Technologies */}
                 <div className="mt-5 flex flex-wrap gap-2">
-                    {project.technologies?.map((technology) => (
+                    {[...new Set(project.technologies)]?.map((technology) => (
                         <span
                             key={technology}
                             className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600"
@@ -192,19 +189,14 @@ function ProjectDetails() {
                     ))}
                 </div>
 
-                {/* Deadline */}
                 {project.deadline && (
                     <p className="mt-5 text-sm text-gray-500">
-                        Deadline:{" "}
-                        {new Date(
-                            project.deadline
-                        ).toLocaleDateString()}
+                        Deadline: {new Date( project.deadline ).toLocaleDateString()}
                     </p>
                 )}
 
             </div>
 
-            {/* Tasks */}
             <div>
                 <div className="mb-4 flex items-center justify-between">
                     <div>
@@ -275,7 +267,6 @@ function ProjectDetails() {
                         value={`${sort}-${order}`}
                         onChange={(e) => {
                             const [newSort, newOrder] = e.target.value.split("-");
-
                             setSort(newSort);
                             setOrder(newOrder);
                         }}
@@ -289,6 +280,7 @@ function ProjectDetails() {
                     </select>
 
                 </div>
+                
                 {/* Tasks */}
                 <div className="rounded-xl bg-white p-6 shadow-sm">
                     {tasksLoading ? (
